@@ -11,7 +11,15 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "cursos")
+@Table(
+        name = "cursos",
+        indexes = {
+            @Index(
+                name = "index_curso_profesor",
+                columnList = "profesor_id")
+        }
+)
+
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +40,19 @@ public class Curso {
     @JoinTable(
             name = "curso_alumnos",
             joinColumns = @JoinColumn(name = "curso_id"),
-            inverseJoinColumns = @JoinColumn(name = "alumno_id")
-            )
+            inverseJoinColumns = @JoinColumn(name = "alumno_id"),
+            indexes = {
+                @Index(
+                    name = "index_curso_alumnos_curso",
+                    columnList = "curso_id"),
+                @Index(
+                    name = "index_curso_alumnos_alumno",
+                    columnList = "alumno_id")
+            })
+
+
+
+
     Set<Alumno> alumnos = new HashSet<>();
 
 
