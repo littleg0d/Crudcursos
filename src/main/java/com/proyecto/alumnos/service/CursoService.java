@@ -19,8 +19,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -139,24 +137,20 @@ public class CursoService {
     public void quitarAlumno(Long alumnoId, Long cursoId)
     {
         Curso c = buscarId(cursoId);
+        boolean encontrado = c.getAlumnos().removeIf(a -> a.getId().equals(alumnoId));
+        /*
         Alumno alu = alumnoEnCurso(c.getAlumnos(), alumnoId)
-                .orElseThrow(() -> new NoEncontrado("El alumno no esta asignado a este curso"));
+            .orElseThrow(() -> new NoEncontrado("El alumno no esta asignado a este curso"));
         c.getAlumnos().remove(alu);
+        */
+        if (!encontrado)
+            throw new NoEncontrado("El alumno no esta asignado a este curso");
         cursoRepository.save(c);
     }
     public List<AlumnoResponseDTO> listarAlumnos(Long cursoId)
     {
         Curso c = buscarId(cursoId);
         return alumnoMapper.toResponseSet(c.getAlumnos());
-    }
-    private Optional<Alumno> alumnoEnCurso(Set<Alumno> alumnos, Long alumnoId)
-    {
-        for(Alumno a: alumnos)
-        {
-            if(a.getId().equals(alumnoId))
-                return Optional.of(a);
-        }
-        return Optional.empty();
     }
 
 
