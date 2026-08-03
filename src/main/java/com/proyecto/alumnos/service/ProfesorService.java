@@ -6,7 +6,6 @@ import com.proyecto.alumnos.exceptions.NoEncontrado;
 import com.proyecto.alumnos.exceptions.YaEncontrado;
 import com.proyecto.alumnos.mapper.ProfesorMapper;
 import com.proyecto.alumnos.model.Profesor;
-import com.proyecto.alumnos.repositories.CursoRepository;
 import com.proyecto.alumnos.repositories.ProfesorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.List;
 public class ProfesorService {
     private final ProfesorMapper profesorMapper;
     private final ProfesorRepository profesorRepository;
-    private final CursoRepository cursoRepository;
 
 
     public List<ProfesorResponseDTO> listar()
@@ -35,7 +33,7 @@ public class ProfesorService {
     }
     public void borrar(Long id){
         Profesor p = buscarId(id);
-        if(cursoRepository.existsByProfesorId(id))
+        if(profesorRepository.existsProfesorEnCurso(id))
             throw new YaEncontrado("Ya hay un profesor asignado en este curso");
         profesorRepository.delete(p);
     }
