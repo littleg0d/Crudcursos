@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -128,7 +129,7 @@ public class CursoService {
     {
         Curso c = buscarId(cursoId);
         Alumno alu = buscarAlumnoId(alumnoId);
-        if(alumnoEnLista(c.getAlumnos(), alumnoId))
+        if(alumnoEnCurso(c.getAlumnos(), alumnoId).isPresent())
             throw new YaEncontrado("El alumno ya esta asignado a este curso");
         if(c.getCupoMax() <= c.getAlumnos().size())
             throw new CupoLleno("El curso ya esta lleno");
@@ -138,9 +139,8 @@ public class CursoService {
     public void quitarAlumno(Long alumnoId, Long cursoId)
     {
         Curso c = buscarId(cursoId);
-        Alumno alu = alumnoEnCurso(c.getAlumnos(), alumnoId);
-        if(alu == null)
-            throw new NoEncontrado("El alumno no esta asignado a este curso");
+        Alumno alu = alumnoEnCurso(c.getAlumnos(), alumnoId)
+                .orElseThrow(() -> new NoEncontrado("El alumno no esta asignado a este curso"));
         c.getAlumnos().remove(alu);
         cursoRepository.save(c);
     }
@@ -149,23 +149,14 @@ public class CursoService {
         Curso c = buscarId(cursoId);
         return alumnoMapper.toResponseSet(c.getAlumnos());
     }
-    private boolean alumnoEnLista(Set<Alumno> alumnos, Long alumnoId)
+    private Optional<Alumno> alumnoEnCurso(Set<Alumno> alumnos, Long alumnoId)
     {
         for(Alumno a: alumnos)
         {
             if(a.getId().equals(alumnoId))
-                return true;
+                return Optional.of(a);
         }
-        return false;
-    }
-    private Alumno alumnoEnCurso(Set<Alumno> alumnos, Long alumnoId)
-    {
-        for(Alumno a: alumnos)
-        {
-            if(a.getId().equals(alumnoId))
-                return a;
-        }
-        return null;
+        return Optional.empty();
     }
 
 
