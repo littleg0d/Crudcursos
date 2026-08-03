@@ -129,7 +129,7 @@ public class CursoService {
     {
         Curso c = buscarId(cursoId);
         Alumno alu = buscarAlumnoId(alumnoId);
-        if(alumnoEnCurso(c.getAlumnos(), alumnoId).isPresent())
+        if(cursoRepository.existsByIdAndAlumnos_Id(cursoId,alumnoId))
             throw new YaEncontrado("El alumno ya esta asignado a este curso");
         if(c.getCupoMax() <= c.getAlumnos().size())
             throw new CupoLleno("El curso ya esta lleno");
