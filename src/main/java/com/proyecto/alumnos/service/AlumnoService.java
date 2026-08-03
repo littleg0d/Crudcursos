@@ -47,7 +47,7 @@ public class AlumnoService {
     public void borrar(Long id)
     {
         Alumno alu = buscarId(id);
-        if(cursoRepository.existsByAlumnosId(id))
+        if(cursoRepository.existsByAlumnos_Id(id))
             throw new YaEncontrado("No se puede borrar un alumno que tiene cursos asignados");
         alumnoRepository.delete(alu);
 
