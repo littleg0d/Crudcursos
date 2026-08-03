@@ -15,6 +15,7 @@ import com.proyecto.alumnos.model.Profesor;
 import com.proyecto.alumnos.repositories.AlumnoRepository;
 import com.proyecto.alumnos.repositories.CursoRepository;
 import com.proyecto.alumnos.repositories.ProfesorRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,13 @@ public class CursoService {
     private final AlumnoRepository alumnoRepository;
     private final ProfesorRepository profesorRepository;
     private final AlumnoMapper alumnoMapper;
-
+    @Transactional
     public CursoResponseDTO agregar(CursoRequestDTO dto){
         Curso c = cursoMapper.toEntity(dto);
         c.setProfesor(null);
         return cursoMapper.toResponse(cursoRepository.save(c));
     }
-
+    @Transactional
     public void borrar(Long id){
         Curso c = buscarId(id);
         if(!c.getAlumnos().isEmpty())
@@ -42,6 +43,7 @@ public class CursoService {
         cursoRepository.delete(c);
     }
 
+    @Transactional
     public CursoResponseDTO modificar(CursoRequestDTO dto, Long id)
     {
         Curso c = buscarId(id);
@@ -54,9 +56,6 @@ public class CursoService {
         return cursoMapper.toResponse(cursoRepository.save(c));
     }
 
-    private Curso buscarId(Long id){
-        return cursoRepository.findById(id).orElseThrow(() -> new NoEncontrado("No se encontro el curso"));
-    }
 
     public List<CursoResponseDTO> listar()
     {
@@ -72,7 +71,9 @@ public class CursoService {
 
 
 
-
+    private Curso buscarId(Long id){
+        return cursoRepository.findById(id).orElseThrow(() -> new NoEncontrado("No se encontro el curso"));
+    }
     private Profesor buscarProfeId(Long id)
     {
         return profesorRepository.findById(id).orElseThrow(() -> new NoEncontrado("No se encontro el profesor "));
@@ -81,7 +82,7 @@ public class CursoService {
     {
         return alumnoRepository.findById(id).orElseThrow(() -> new NoEncontrado("No se encontro el alumno "));
     }
-
+    @Transactional
     public void agregarProfesor(Long profesorId, Long cursoId)
         {
             Curso c = buscarId(cursoId);
@@ -99,6 +100,7 @@ public class CursoService {
             cursoRepository.save(c);
 
         }
+    @Transactional
     public void quitarProfesor(Long cursoId)
     {
         Curso c = buscarId(cursoId);
@@ -107,6 +109,7 @@ public class CursoService {
         c.setProfesor(null);
         cursoRepository.save(c);
     }
+    @Transactional
     public void cambiarProfesor(Long cursoId, Long profesorId)
     {
         Curso c = buscarId(cursoId);
@@ -121,8 +124,7 @@ public class CursoService {
         cursoRepository.save(c);
     }
 
-
-
+    @Transactional
     public void agregarAlumno(Long alumnoId, Long cursoId)
     {
         Curso c = buscarId(cursoId);
@@ -134,6 +136,7 @@ public class CursoService {
         c.getAlumnos().add(alu);
         cursoRepository.save(c);
     }
+    @Transactional
     public void quitarAlumno(Long alumnoId, Long cursoId)
     {
         Curso c = buscarId(cursoId);
@@ -147,6 +150,8 @@ public class CursoService {
             throw new NoEncontrado("El alumno no esta asignado a este curso");
         cursoRepository.save(c);
     }
+
+    @Transactional(readOnly = true)
     public List<AlumnoResponseDTO> listarAlumnos(Long cursoId)
     {
         Curso c = buscarId(cursoId);

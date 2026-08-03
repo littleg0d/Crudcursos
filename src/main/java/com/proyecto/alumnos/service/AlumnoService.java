@@ -8,6 +8,7 @@ import com.proyecto.alumnos.dto.AlumnoRequestDTO;
 import com.proyecto.alumnos.mapper.AlumnoMapper;
 import com.proyecto.alumnos.model.Alumno;
 import com.proyecto.alumnos.repositories.AlumnoRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class AlumnoService {
         return alumnoMapper.toResponseList(alumnoRepository.findAll());
     }
 
+    @Transactional
     public AlumnoResponseDTO guardar(AlumnoRequestDTO alumno){
         if(alumnoRepository.existsByEmail(alumno.getEmail()))
             throw new YaEncontrado("Ya existe un alumno con este email");
@@ -42,6 +44,7 @@ public class AlumnoService {
         return alumnoMapper.toResponse(alumnoRepository.save(alu));
     }
 
+    @Transactional
     public void borrar(Long id)
     {
         Alumno alu = buscarId(id);
@@ -50,6 +53,7 @@ public class AlumnoService {
         alumnoRepository.delete(alu);
 
     }
+    @Transactional
     public AlumnoResponseDTO modificar(AlumnoRequestDTO dto, Long id)
     {
         Alumno alumnoEncontrado = buscarId(id);

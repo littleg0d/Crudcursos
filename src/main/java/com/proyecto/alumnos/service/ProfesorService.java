@@ -7,6 +7,7 @@ import com.proyecto.alumnos.exceptions.YaEncontrado;
 import com.proyecto.alumnos.mapper.ProfesorMapper;
 import com.proyecto.alumnos.model.Profesor;
 import com.proyecto.alumnos.repositories.ProfesorRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class ProfesorService {
     {
         return profesorMapper.toResponseList(profesorRepository.findAll());
     }
+    @Transactional
     public ProfesorResponseDTO agregar(ProfesorRequestDTO dto)
     {
         if(profesorRepository.existsByEmail(dto.getEmail()))
@@ -31,6 +33,7 @@ public class ProfesorService {
         Profesor p = profesorMapper.toEntity(dto);
         return profesorMapper.toResponse(profesorRepository.save(p));
     }
+    @Transactional
     public void borrar(Long id){
         Profesor p = buscarId(id);
         if(profesorRepository.existsProfesorEnCurso(id))
@@ -38,6 +41,7 @@ public class ProfesorService {
         profesorRepository.delete(p);
     }
 
+    @Transactional
     public ProfesorResponseDTO modificar(ProfesorRequestDTO dto, Long id)
     {
 
