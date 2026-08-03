@@ -31,7 +31,7 @@ public class Curso {
     @Column(nullable = false)
     private LocalDate fechaFin;
     @Column(nullable = false)
-    private int cupoMax;
+    private Integer cupoMax;
     @ManyToOne
     @JoinColumn(name = "profesor_id")
     private Profesor profesor;

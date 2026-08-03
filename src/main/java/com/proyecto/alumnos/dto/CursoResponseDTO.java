@@ -12,7 +12,7 @@ public class CursoResponseDTO {
     private String nombre;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private int cupoMax;
+    private Integer cupoMax;
     private Long profesorId;
 
 }
