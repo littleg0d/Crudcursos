@@ -22,14 +22,14 @@ public class AlumnoService {
     private final AlumnoMapper alumnoMapper;
 
 
-    private Alumno buscarId(Long id){
+    public Alumno buscarEntidad(Long id){
         return alumnoRepository.findById(id).orElseThrow(() -> new NoEncontrado("Alumno no encontrado"));
     }
 
 
     public AlumnoResponseDTO consultarAlumnoPorId(Long id)
     {
-        return alumnoMapper.toResponse(buscarId(id));
+        return alumnoMapper.toResponse(buscarEntidad(id));
     }
 
     public List<AlumnoResponseDTO> listar() {
@@ -47,7 +47,7 @@ public class AlumnoService {
     @Transactional
     public void borrar(Long id)
     {
-        Alumno alu = buscarId(id);
+        Alumno alu = buscarEntidad(id);
         if(alumnoRepository.existsAlumnoEnCurso(id))
             throw new YaEncontrado("No se puede borrar un alumno que tiene cursos asignados");
         alumnoRepository.delete(alu);
@@ -56,7 +56,7 @@ public class AlumnoService {
     @Transactional
     public AlumnoResponseDTO modificar(AlumnoRequestDTO dto, Long id)
     {
-        Alumno alumnoEncontrado = buscarId(id);
+        Alumno alumnoEncontrado = buscarEntidad(id);
         if(alumnoRepository.existsByEmailAndIdNot(dto.getEmail(),id))
             throw new YaEncontrado("Email ya encontrado en otro alumno ");
         alumnoEncontrado.setNombre(dto.getNombre());

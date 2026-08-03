@@ -35,7 +35,7 @@ public class ProfesorService {
     }
     @Transactional
     public void borrar(Long id){
-        Profesor p = buscarId(id);
+        Profesor p = buscarEntidad(id);
         if(profesorRepository.existsProfesorEnCurso(id))
             throw new YaEncontrado("Ya hay un profesor asignado en este curso");
         profesorRepository.delete(p);
@@ -45,7 +45,7 @@ public class ProfesorService {
     public ProfesorResponseDTO modificar(ProfesorRequestDTO dto, Long id)
     {
 
-        Profesor p = buscarId(id);
+        Profesor p = buscarEntidad(id);
         if(profesorRepository.existsByEmailAndIdNot(dto.getEmail(),p.getId())){
             throw new YaEncontrado("Ya hay un profesor con ese email ");
         }
@@ -57,9 +57,9 @@ public class ProfesorService {
 
     public ProfesorResponseDTO consultarPorId(Long id)
     {
-        return profesorMapper.toResponse(buscarId(id));
+        return profesorMapper.toResponse(buscarEntidad(id));
     }
-    private Profesor buscarId(Long id)
+    public Profesor buscarEntidad(Long id)
     {
         return profesorRepository.findById(id).orElseThrow(() -> new NoEncontrado("No se encontro el profesor"));
     }
