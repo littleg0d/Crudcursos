@@ -2,6 +2,8 @@ package com.proyecto.alumnos.repositories;
 
 import com.proyecto.alumnos.model.Alumno;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
@@ -9,5 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface AlumnoRepository extends JpaRepository<Alumno, Long> {
      boolean existsByEmail(String email);
      boolean existsByEmailAndIdNot(String email, Long id);
+
+     @Query("SELECT COUNT(curso) > 0 FROM Curso curso JOIN curso.alumnos alumno WHERE alumno.id = :alumnoId")
+     boolean existsAlumnoEnCurso(@Param("alumnoId") Long alumnoId);
 
 }

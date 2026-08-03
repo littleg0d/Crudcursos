@@ -8,7 +8,6 @@ import com.proyecto.alumnos.dto.AlumnoRequestDTO;
 import com.proyecto.alumnos.mapper.AlumnoMapper;
 import com.proyecto.alumnos.model.Alumno;
 import com.proyecto.alumnos.repositories.AlumnoRepository;
-import com.proyecto.alumnos.repositories.CursoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ import java.util.List;
 public class AlumnoService {
     private final AlumnoRepository alumnoRepository;
     private final AlumnoMapper alumnoMapper;
-    private final CursoRepository cursoRepository;
 
 
     private Alumno buscarId(Long id){
@@ -47,7 +45,7 @@ public class AlumnoService {
     public void borrar(Long id)
     {
         Alumno alu = buscarId(id);
-        if(cursoRepository.existsByAlumnos_Id(id))
+        if(alumnoRepository.existsAlumnoEnCurso(id))
             throw new YaEncontrado("No se puede borrar un alumno que tiene cursos asignados");
         alumnoRepository.delete(alu);
 
