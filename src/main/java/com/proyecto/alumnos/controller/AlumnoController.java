@@ -26,17 +26,19 @@ public class AlumnoController {
     @GetMapping
     @Operation(summary = "Listar alumnos", description = "Lista todos los alumnos")
     @ApiResponse(responseCode = "200", description = "Lista de alumnos")
+
     public ResponseEntity<List<AlumnoResponseDTO>> listarAlumnos(){
        return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(alumnoService.listar());
     }
+
+
     @PostMapping
     @Operation(summary = "Crear alumno", description = "Crea un alumno nuevo")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Alumno creado"),
-            @ApiResponse(responseCode = "400", description = "Datos del alumno invalidos"),
-            @ApiResponse(responseCode = "409", description = "Ya existe un alumno con ese email")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
     })
     public ResponseEntity<AlumnoResponseDTO> crearAlumno (@Valid @RequestBody AlumnoRequestDTO dto){
         return ResponseEntity
@@ -47,10 +49,8 @@ public class AlumnoController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar alumno", description = "Busca un alumno por id")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Alumno encontrado"),
-            @ApiResponse(responseCode = "404", description = "Alumno no encontrado")
-    })
+    @ApiResponse(responseCode = "200", description = "Alumno encontrado")
+
     public ResponseEntity<AlumnoResponseDTO> buscarAlumnoPorId( @PathVariable  Long id){
        return ResponseEntity
                 .status(HttpStatus.OK)
@@ -58,24 +58,19 @@ public class AlumnoController {
     }
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar alumno", description = "Borra un alumno si no tiene cursos")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Alumno borrado"),
-            @ApiResponse(responseCode = "404", description = "Alumno no encontrado"),
-            @ApiResponse(responseCode = "409", description = "El alumno tiene cursos asignados")
-    })
+    @ApiResponse(responseCode = "204", description = "Alumno borrado")
     public ResponseEntity<Void> borrarAlumno( @PathVariable Long id){
         alumnoService.borrar(id);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
     @PutMapping("/{id}")
     @Operation(summary = "Modificar alumno", description = "Modifica los datos de un alumno")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Alumno modificado"),
-            @ApiResponse(responseCode = "400", description = "Datos del alumno invalidos"),
-            @ApiResponse(responseCode = "404", description = "Alumno no encontrado"),
-            @ApiResponse(responseCode = "409", description = "El email pertenece a otro alumno")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
     })
     public ResponseEntity<AlumnoResponseDTO> modificarAlumno(@Valid @RequestBody AlumnoRequestDTO dto,  @PathVariable Long id )
     {
@@ -83,7 +78,5 @@ public class AlumnoController {
                 .status(HttpStatus.OK)
                 .body(alumnoService.modificar(dto,id));
     }
-
-
 
 }

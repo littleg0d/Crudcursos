@@ -34,8 +34,7 @@ public class ProfesorController {
     @Operation(summary = "Crear profesor", description = "Crea un profesor nuevo")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Profesor creado"),
-            @ApiResponse(responseCode = "400", description = "Datos del profesor invalidos"),
-            @ApiResponse(responseCode = "409", description = "Ya existe un profesor con ese email")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
     })
     public ResponseEntity<ProfesorResponseDTO> crearProfesor(@Valid @RequestBody ProfesorRequestDTO dto){
         return ResponseEntity
@@ -46,10 +45,8 @@ public class ProfesorController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar profesor", description = "Busca un profesor por id")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Profesor encontrado"),
-            @ApiResponse(responseCode = "404", description = "Profesor no encontrado")
-    })
+    @ApiResponse(responseCode = "200", description = "Profesor encontrado")
+
     public ResponseEntity<ProfesorResponseDTO> obtenerProfesor(@PathVariable Long id){
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -57,11 +54,8 @@ public class ProfesorController {
     }
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar profesor", description = "Borra un profesor si no tiene cursos")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Profesor borrado"),
-            @ApiResponse(responseCode = "404", description = "Profesor no encontrado"),
-            @ApiResponse(responseCode = "409", description = "El profesor tiene cursos asignados")
-    })
+    @ApiResponse(responseCode = "204", description = "Profesor borrado")
+
     public ResponseEntity<Void> borrarProfesor( @PathVariable Long id){
         profesorService.borrar(id);
         return ResponseEntity
@@ -72,10 +66,9 @@ public class ProfesorController {
     @Operation(summary = "Modificar profesor", description = "Modifica los datos de un profesor")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Profesor modificado"),
-            @ApiResponse(responseCode = "400", description = "Datos del profesor invalidos"),
-            @ApiResponse(responseCode = "404", description = "Profesor no encontrado"),
-            @ApiResponse(responseCode = "409", description = "El email pertenece a otro profesor")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
     })
+
     public ResponseEntity<ProfesorResponseDTO> modificarProfesor(@Valid @RequestBody ProfesorRequestDTO dto, @PathVariable Long id )
     {
         return ResponseEntity
