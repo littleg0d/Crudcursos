@@ -3,6 +3,7 @@ import com.proyecto.alumnos.dto.ProfesorRequestDTO;
 import com.proyecto.alumnos.dto.ProfesorResponseDTO;
 import com.proyecto.alumnos.service.ProfesorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +35,7 @@ public class ProfesorController {
     @Operation(summary = "Crear profesor", description = "Crea un profesor nuevo")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Profesor creado"),
-            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados", content = @Content)
     })
     public ResponseEntity<ProfesorResponseDTO> crearProfesor(@Valid @RequestBody ProfesorRequestDTO dto){
         return ResponseEntity
@@ -66,7 +67,7 @@ public class ProfesorController {
     @Operation(summary = "Modificar profesor", description = "Modifica los datos de un profesor")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Profesor modificado"),
-            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados", content = @Content)
     })
 
     public ResponseEntity<ProfesorResponseDTO> modificarProfesor(@Valid @RequestBody ProfesorRequestDTO dto, @PathVariable Long id )

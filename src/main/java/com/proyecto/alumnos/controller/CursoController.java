@@ -5,6 +5,7 @@ import com.proyecto.alumnos.dto.CursoRequestDTO;
 import com.proyecto.alumnos.dto.CursoResponseDTO;
 import com.proyecto.alumnos.service.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +29,7 @@ public class CursoController {
     @Operation(summary = "Crear curso", description = "Crea un curso sin profesor ni alumnos")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Curso creado"),
-            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados", content = @Content)
     })
     public ResponseEntity<CursoResponseDTO> crearCurso(@Valid @RequestBody CursoRequestDTO dto) {
         return ResponseEntity
@@ -69,7 +70,7 @@ public class CursoController {
     @Operation(summary = "Modificar curso", description = "Modifica los datos del curso")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Curso modificado"),
-            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados")
+            @ApiResponse(responseCode = "400", description = "Error de validacion en los datos enviados", content = @Content)
     })
     public ResponseEntity<CursoResponseDTO> modificarCurso(
             @Valid @RequestBody CursoRequestDTO dto,
